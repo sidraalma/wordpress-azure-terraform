@@ -70,12 +70,13 @@ resource "azurerm_linux_virtual_machine_scale_set" "wordpress" {
   disable_password_authentication = false
   custom_data                     = data.template_cloudinit_config.config.rendered
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
+source_image_reference {
+    publisher = "OpenLogic"
+    offer     = "CentOS"
+    sku       = "7_9-gen2"
     version   = "latest"
   }
+
 
   os_disk {
     storage_account_type = "Standard_LRS"
@@ -98,7 +99,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "wordpress" {
 }
 
 data "template_file" "script" {
-  template = file("web.conf")
+  template = file("web1.conf")
 }
 
 data "template_cloudinit_config" "config" {
@@ -106,7 +107,7 @@ data "template_cloudinit_config" "config" {
   base64_encode = true
 
   part {
-    filename     = "web.conf"
+    filename     = "web1.conf"
     content_type = "text/cloud-config"
     content      = data.template_file.script.rendered
   }
